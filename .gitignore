@@ -3,5 +3,9 @@
 .RData
 .Ruserdata
 *.html
+*.docx
+*.pdf
+*.log
+*.tex
 RMarkdownDemo_cache
 RMarkdownDemo_files
