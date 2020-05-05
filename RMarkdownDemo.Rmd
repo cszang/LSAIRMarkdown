@@ -1,0 +1,202 @@
+---
+title: "R Markdown Demo"
+output: html_document
+bibliography: demobib.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+- Combine text and code
+- Code is written is chunks, text is around chunks
+- Render to various outputs: PDF, slides, HTML, Word, ...
+- Use templates
+- Embed interactive elements with Shiny
+- Great for analyzing data
+- Plots adapt with code/data changes upon rendering
+- Let others try out things, e.g. change parameters and re-run
+- Installation: `install.packages("rmarkdown")`
+
+# Create a new R Markdown Document
+
+Easiest way: `RStudio > File > New File > R Markdown`
+
+But: you can use any other text editor. Good support is offered by Emacs, inferior support by other editors like VS Code.
+
+# YAML Metadata Section
+
+Metadata for the document are given inside the 
+
+```
+---
+
+---
+```
+
+at the beginning of the document. You don't need to learn YAML (it's just key-value pairs, anyway), most stuff can be filled in automatically.
+
+
+# Markdown
+
+## We already know what this is!
+
+Refer to Konstantin's presentation and https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet for reference.
+
+## A few examples
+
+### Embed a picture
+
+![R Markdown is fantastic!](https://i1.wp.com/lustig.businessloan.tips/wp-content/uploads/2019/03/30-Unforgettable-Funny-Dog-Memes-Unleashed.jpg)
+
+### Embed LaTeX math
+
+$\Delta\Psi_{ww} = \frac{1}{T}\int_{0}^{T}\Delta\Psi\left(t\right) dt \approx const.$
+
+(also appears on hover-over in the editor)
+
+# Code Chunks
+
+## Basic anatomy
+
+```{r}
+1 + 1
+sin(pi/2)
+```
+
+```{r}
+plot(ts(exp(1:10)))
+```
+
+## Inline rendering
+
+Can be turned on/off in options.
+
+## Naming chunks
+
+```{r a perfectly named chunk}
+cat("what a great chunk of code!\n")
+```
+
+## Chunk options
+
+### Hiding the code
+
+```{r code is hidden, echo=FALSE}
+cat("you won't see the code behind me!\n")
+```
+
+### Hiding the output
+
+```{r output is hidden, results='hide'}
+cat("you won't see the results, only the code!\n")
+```
+
+### Hide both code and output
+
+Don't worry if you don't see anything here, that's the intended behaviour!
+
+```{r hide everything, include=FALSE}
+cat("you won't see anything!\n")
+```
+
+### Caching results
+
+For long-running computations, it makes perfect sense to cache the results. R Markdown has a mechanism for determining when it's time to evualate the code again (e.g., checksum of dependencies has changed), but you can also do this manually.
+
+```{r cache stuff, cache=TRUE}
+z <- numeric(1e8)
+```
+
+## Other languages
+
+Just some examples of what is possible.
+
+### Bash
+
+```{bash, eval=FALSE}
+printf "hello\nyellow\nmellow\nworld" | grep 'ello' | sort
+```
+
+### Python
+
+Python needs the reticulate package, don't do this now, it takes a while!
+
+```{python, eval=FALSE}
+5 + 8
+```
+
+### C++ with Rcpp
+
+```{Rcpp, cache=TRUE}
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericVector timesTwo(NumericVector x) {
+  return x * 2;
+}
+```
+
+```{r}
+timesTwo(3)
+```
+
+## `source` other files
+
+# Inline Code
+
+```{r}
+answer <- 42
+```
+
+The answer is `r answer`.
+
+# Figure options
+
+Set width, height, figure caption etc.
+
+```{r figure options demo, fig.width=5, fig.height=3, fig.cap="This figure has a a caption!"}
+boxplot(Sepal.Length ~ Species, data = iris)
+```
+
+# Tables
+
+`knitr::kable` is one possible way:
+
+```{r example-table}
+knitr::kable(mtcars[1:5,])
+```
+
+# Citations
+
+I am citing my favourite paper here [@bastin_global_2019]. Note that the bibliography is placed at the end of the document.
+
+# R Markdown vs. "R Notebooks"
+
+# Sharing and Collaborating
+
+## GitHub
+
+### Read-only
+
+- GitHub can render *.Rmd files nicely (static page)
+
+### Real collaboration
+
+- *.Rmd files are plain text, so a regular GitHub-flow is possible
+- standard tools for diff'ing, etc.
+
+## Binder
+
+Takes a few steps more than for a Jupyter Notebook, but still quite manageable. See here for details and instructions: https://kbroman.org/blog/2019/02/18/omg_binder/
+
+# Resources
+
+https://bookdown.org/yihui/rmarkdown/
+
+# References
+
+
