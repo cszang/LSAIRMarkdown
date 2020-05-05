@@ -181,16 +181,18 @@ I am citing my favourite paper here [@bastin_global_2019]. Note that the bibliog
 
 # Sharing and Collaborating
 
-## GitHub
+## Read-only
 
-### Read-only
-
-- Share rendered files (html, pdf)
+- Share rendered static files (html, pdf)
 - GitHub can render `*.Rmd` files nicely (static page)
 
-### Real collaboration
+## PITA collaboration
 
-- `*.Rmd` files are plain text, so a regular GitHub-flow is possible
+- Share rendered Word file, get modifications back with track changes, work into original R Markdown file
+
+## Real collaboration
+
+- `*.Rmd` files are plain text, so a regular Git(Hub)-flow is possible
 - standard tools for diff'ing, etc.
 
 ## Binder
