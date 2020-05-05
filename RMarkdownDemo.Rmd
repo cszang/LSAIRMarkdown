@@ -1,6 +1,9 @@
 ---
 title: "R Markdown Demo"
-output: html_document
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
 bibliography: demobib.bib
 ---
 
@@ -49,7 +52,7 @@ Refer to Konstantin's presentation and https://github.com/adam-p/markdown-here/w
 
 ### Embed a picture
 
-![R Markdown is fantastic!](https://i1.wp.com/lustig.businessloan.tips/wp-content/uploads/2019/03/30-Unforgettable-Funny-Dog-Memes-Unleashed.jpg)
+![R Markdown is fantastic!](img/dog.png)
 
 ### Embed LaTeX math
 
@@ -182,11 +185,12 @@ I am citing my favourite paper here [@bastin_global_2019]. Note that the bibliog
 
 ### Read-only
 
-- GitHub can render *.Rmd files nicely (static page)
+- Share rendered files (html, pdf)
+- GitHub can render `*.Rmd` files nicely (static page)
 
 ### Real collaboration
 
-- *.Rmd files are plain text, so a regular GitHub-flow is possible
+- `*.Rmd` files are plain text, so a regular GitHub-flow is possible
 - standard tools for diff'ing, etc.
 
 ## Binder
