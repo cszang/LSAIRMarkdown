@@ -1,0 +1,84 @@
+---
+title: "Seasonal Correlation of the Multivariate ENSO Index and Average Indian Rainfall"
+author:
+- Christian S. Zang, Land Surface-Atmosphere Interactions, Technical University of Munich
+- Tilda M. Zang, Slumber and Sniffing Resarch Unit, Bavarian Canine University
+output: html_document
+bibliography: meiair.bib
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+# we do it tidily
+library(tidyverse)
+# load custom functions
+source("R/methods.R")
+```
+
+# Introduction
+
+To keep us busy durig the lockdown, we looked how the multivariate ENSO index (MEI) is seasonally correlated with the average Indian rainfall (AIR). Some folks said there is some correlation [@gershunov_low-frequency_2001].
+
+# Material and Methods
+
+We downloaded the MEI data from https://psl.noaa.gov/enso/mei/, and the AIR data from https://crudata.uea.ac.uk/cru/data/hrg/cru_ts_4.01/crucy.1709191757.v4.01/countries/pre/. The monthly resolution of the AIR data was aggregated into two-monthly seasons to match the temporal aggregation of MEI. For each season, we computed Kendall's tau for MEI and AIR for the common time span.
+
+```{r two-month seasons}
+tms <- c("DJ", "JF", "FM", "MA", "AM", "MJ", "JJ",
+         "JA", "AS", "SO", "ON", "ND")
+
+```
+
+```{r read enso data}
+mei <- read_lines("data/meiv2.data.txt", skip = 1) %>% 
+  .[-43:-46] %>% 
+  read_table(col_names = c("year", tms),
+             na = "-999")
+```
+
+```{r read indian precip data}
+air <- read_table("data/crucy.v4.01.1901.2016.India.pre.per",
+                  skip = 3, na = "-999.0")
+```
+
+```{r seasonalise air}
+air <- air %>% 
+  select(YEAR:DEC) %>% 
+  mutate(PDEC = lag(DEC)) %>% 
+  select(YEAR, PDEC, everything()) %>% 
+  season_fun(tms)
+```
+
+```{r tidy data}
+airmei <- air %>% gather(season, precip, -year) %>% 
+  inner_join(mei %>% gather(season, mei, -year))
+```
+
+```{r seasonal correlations}
+seas_corr <- airmei %>% 
+  mutate(season = ordered(season, levels = tms)) %>% 
+  group_by(season) %>% 
+  nest() %>% 
+  mutate(correlation = purrr::map_dbl(data, cor_fun))
+```
+
+# Results
+
+We found that the correlation between MEI and AIR switches signs, with positive correlations from ON to MA, and negative correlations between MJ and SO (Figure 1).
+
+```{r, fig.cap="Seasonal correlation (Kendall's tau) between bi-monthly mean MEI and AIR"}
+seas_corr %>% 
+  ggplot(aes(x = season, y = correlation)) +
+  geom_col()
+```
+
+
+# Discussion
+
+Well, that was exactly what we expected. I mean, look at @gershunov_low-frequency_2001!
+
+# Autor contribution statement
+
+CSZ conceived the study, carried out all analyses and wrote the manuscript. TMZ slept most of the time, and occassionally interrupted CSZ by licking the keyboard.
+
+# References
